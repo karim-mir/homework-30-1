@@ -11,6 +11,7 @@ class Course(models.Model):
         upload_to="educations/previews/",
         verbose_name="Превью курса",
         blank=True,
+        null=True,
         help_text="Загрузите превью курса",
     )
     description = models.TextField(
@@ -41,6 +42,7 @@ class Lesson(models.Model):
         upload_to="educations/previews/",
         verbose_name="Превью урока",
         blank=True,
+        null=True,
         help_text="Загрузите превью урока",
     )
     video_url = models.URLField(
