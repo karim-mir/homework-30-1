@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from educations.views import CourseViewSet, LessonListCreateAPIView, LessonRetrieveUpdateDestroyAPIView
 
-router = DefaultRouter
+router = DefaultRouter()
 router.register(r'courses', CourseViewSet)
 
 urlpatterns = [
