@@ -1,0 +1,13 @@
+[
+  {
+    "model": "educations.lesson",
+    "pk": 1,
+    "fields": {
+      "lesson_name": "Введение",
+      "description": "Первый урок",
+      "preview": "",
+      "video_url": "",
+      "course": 1
+    }
+  }
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "model": "educations.course",
+    "pk": 1,
+    "fields": {
+      "course_name": "Python для начинающих",
+      "preview": "",
+      "description": "Базовый курс"
+    }
+  }
+]

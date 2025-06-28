@@ -1,0 +1,14 @@
+[
+  {
+    "model": "educations.payment",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "payment_date": "2025-06-28T10:00:00Z",
+      "paid_course": 1,
+      "paid_lesson": null,
+      "payment_sum": 3000,
+      "payment_method": "cash"
+    }
+  }
+]

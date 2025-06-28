@@ -1,0 +1,23 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$...ваш_хеш_пароля...",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-06-28T10:00:00Z",
+      "email": "test@example.com",
+      "avatar": "",
+      "phone": "",
+      "city": "",
+      "token": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
