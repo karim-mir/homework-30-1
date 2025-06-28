@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Course(models.Model):
     course_name = models.CharField(
         max_length=35,
@@ -56,11 +57,11 @@ class Lesson(models.Model):
         help_text="Курс, к которому относится урок",
     )
 
-
     class Meta:
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
 
     def __str__(self):
-        return (f"Название урока: {self.lesson_name}"
-                f"Описание урока: {self.description}")
+        return (
+            f"Название урока: {self.lesson_name}" f"Описание урока: {self.description}"
+        )

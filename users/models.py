@@ -1,7 +1,7 @@
-from phonenumber_field.modelfields import PhoneNumberField
-
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 class User(AbstractUser):
     username = None
@@ -14,9 +14,7 @@ class User(AbstractUser):
         help_text="Загрузите свой аватар",
     )
     phone = PhoneNumberField(
-        verbose_name="Телефон",
-        blank=True,
-        help_text="Введите номер телефона"
+        verbose_name="Телефон", blank=True, help_text="Введите номер телефона"
     )
     city = models.CharField(
         max_length=35,
@@ -24,8 +22,9 @@ class User(AbstractUser):
         blank=True,
         help_text="Введите название города",
     )
-    token = models.CharField(max_length=100, verbose_name="Token", blank=True, null=True)
-
+    token = models.CharField(
+        max_length=100, verbose_name="Token", blank=True, null=True
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
