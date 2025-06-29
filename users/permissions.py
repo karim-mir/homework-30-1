@@ -7,12 +7,19 @@ class IsModerator(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return request.user and request.user.is_authenticated and request.user.groups.filter(name='moderators').exists()
+        return (
+            request.user
+            and request.user.is_authenticated
+            and request.user.groups.filter(name="moderators").exists()
+        )
 
     def has_object_permission(self, request, view, obj):
         # Модераторы могут просматривать и редактировать (GET, PUT, PATCH),
         # но не создавать и удалять (POST, DELETE) — контролируется в get_permissions контроллеров
-        if request.method in permissions.SAFE_METHODS or request.method in ['PUT', 'PATCH']:
+        if request.method in permissions.SAFE_METHODS or request.method in [
+            "PUT",
+            "PATCH",
+        ]:
             return True
         return False
 
@@ -27,4 +34,4 @@ class IsOwner(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         # Проверяем, что у объекта есть поле owner и оно совпадает с пользователем
-        return hasattr(obj, 'owner') and obj.owner == request.user
+        return hasattr(obj, "owner") and obj.owner == request.user

@@ -18,7 +18,9 @@ class CourseViewSet(OwnerOrModeratorQuerysetMixin, viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
-class LessonListCreateAPIView(OwnerOrModeratorQuerysetMixin, generics.ListCreateAPIView):
+class LessonListCreateAPIView(
+    OwnerOrModeratorQuerysetMixin, generics.ListCreateAPIView
+):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator | IsOwner]
@@ -27,7 +29,9 @@ class LessonListCreateAPIView(OwnerOrModeratorQuerysetMixin, generics.ListCreate
         serializer.save(owner=self.request.user)
 
 
-class LessonRetrieveUpdateDestroyAPIView(OwnerOrModeratorQuerysetMixin, generics.RetrieveUpdateDestroyAPIView):
+class LessonRetrieveUpdateDestroyAPIView(
+    OwnerOrModeratorQuerysetMixin, generics.RetrieveUpdateDestroyAPIView
+):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator | IsOwner]
