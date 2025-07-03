@@ -37,6 +37,7 @@ class User(AbstractUser):
         upload_to="users/avatars/",
         verbose_name="Аватар",
         blank=True,
+        null=True,
         help_text="Загрузите свой аватар",
     )
     phone = PhoneNumberField(

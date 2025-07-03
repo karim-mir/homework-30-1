@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import ForeignKey
 
 from users.models import User
 
@@ -135,3 +136,26 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.payment_sum} ({self.payment_method})"
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="subscriptions",
+        verbose_name="Пользователь",
+    )
+    course = models.ForeignKey(
+        "educations.Course",
+        on_delete=models.CASCADE,
+        related_name="subscriptions",
+        verbose_name="Курс",
+    )
+
+    class Meta:
+        verbose_name = "Подписка пользователя"
+        verbose_name_plural = "Подписки пользователей"
+        unique_together = ("user", "course")
+
+    def __str__(self):
+        return f"Подписка {self.user} на курс {self.course}"
