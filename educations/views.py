@@ -7,8 +7,9 @@ from rest_framework.views import APIView
 
 from educations.mixins import OwnerOrModeratorQuerysetMixin
 from educations.models import Course, Lesson, Payment, Subscription
-from educations.serializers import (CourseSerializer, LessonSerializer,
-                                    PaymentSerializer)
+from educations.paginators import StandardResultsSetPagination
+from educations.permissions import IsOwnerOfCourseOrModerator
+from educations.serializers import CourseSerializer, LessonSerializer, PaymentSerializer
 from users.permissions import IsModerator, IsOwner
 
 
@@ -16,17 +17,17 @@ class CourseViewSet(OwnerOrModeratorQuerysetMixin, viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [IsAuthenticated, IsModerator | IsOwner]
+    pagination_class = StandardResultsSetPagination
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
 
-class LessonListCreateAPIView(
-    OwnerOrModeratorQuerysetMixin, generics.ListCreateAPIView
-):
+class LessonListCreateAPIView(OwnerOrModeratorQuerysetMixin, generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticated, IsModerator | IsOwner]
+    permission_classes = [IsOwnerOfCourseOrModerator]
+    pagination_class = StandardResultsSetPagination
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
