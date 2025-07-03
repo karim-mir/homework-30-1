@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions, viewsets
 
 from users.models import User
-from users.serializers import UserSerializer, UserRegisterSerializer
+from users.serializers import UserRegisterSerializer, UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):

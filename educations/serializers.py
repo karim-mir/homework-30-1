@@ -5,7 +5,9 @@ from educations.validators import validate_allowed_url
 
 
 class LessonSerializer(serializers.ModelSerializer):
-    video_url = serializers.URLField(validators=[validate_allowed_url], required=False, allow_blank=True)
+    video_url = serializers.URLField(
+        validators=[validate_allowed_url], required=False, allow_blank=True
+    )
     owner = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:

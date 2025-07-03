@@ -1,4 +1,5 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import SAFE_METHODS, BasePermission
+
 
 class IsOwnerOfCourseOrModerator(BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -15,12 +16,13 @@ class IsOwnerOfCourseOrModerator(BasePermission):
             return False
 
         # Для создания урока проверяем, что пользователь владеет курсом
-        if request.method == 'POST':
-            course_id = request.data.get('course')
+        if request.method == "POST":
+            course_id = request.data.get("course")
             if not course_id:
                 return False
             # Проверяем, что курс принадлежит пользователю или он модератор
             from educations.models import Course
+
             try:
                 course = Course.objects.get(id=course_id)
             except Course.DoesNotExist:

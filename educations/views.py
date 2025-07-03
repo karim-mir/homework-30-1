@@ -1,15 +1,16 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.generics import get_object_or_404
-from rest_framework.response import Response
 from rest_framework import filters, generics, viewsets
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from educations.mixins import OwnerOrModeratorQuerysetMixin
 from educations.models import Course, Lesson, Payment, Subscription
 from educations.paginators import StandardResultsSetPagination
 from educations.permissions import IsOwnerOfCourseOrModerator
-from educations.serializers import CourseSerializer, LessonSerializer, PaymentSerializer
+from educations.serializers import (CourseSerializer, LessonSerializer,
+                                    PaymentSerializer)
 from users.permissions import IsModerator, IsOwner
 
 
@@ -23,7 +24,9 @@ class CourseViewSet(OwnerOrModeratorQuerysetMixin, viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
-class LessonListCreateAPIView(OwnerOrModeratorQuerysetMixin, generics.ListCreateAPIView):
+class LessonListCreateAPIView(
+    OwnerOrModeratorQuerysetMixin, generics.ListCreateAPIView
+):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsOwnerOfCourseOrModerator]
