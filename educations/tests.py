@@ -72,36 +72,48 @@ class LessonCRUDAndSubscriptionTests(APITestCase):
 class SubscriptionAPITests(APITestCase):
     def setUp(self):
         # Создаем пользователя и курс
-        self.user = User.objects.create_user(email="user@example.com", password="pass1234")
-        self.course = Course.objects.create(
-            course_name="Test Course",
-            description="Описание курса",
-            owner=self.user
+        self.user = User.objects.create_user(
+            email="user@example.com", password="pass1234"
         )
-        self.url = reverse('subscriptions')  # Убедитесь, что имя URL совпадает с вашим urls.py
+        self.course = Course.objects.create(
+            course_name="Test Course", description="Описание курса", owner=self.user
+        )
+        self.url = reverse(
+            "subscriptions"
+        )  # Убедитесь, что имя URL совпадает с вашим urls.py
 
     def test_subscribe_to_course(self):
         self.client.force_authenticate(user=self.user)
-        response = self.client.post(self.url, {"course_id": self.course.id}, format='json')
+        response = self.client.post(
+            self.url, {"course_id": self.course.id}, format="json"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['message'], "Подписка создана")
-        self.assertTrue(Subscription.objects.filter(user=self.user, course=self.course).exists())
+        self.assertEqual(response.data["message"], "Подписка создана")
+        self.assertTrue(
+            Subscription.objects.filter(user=self.user, course=self.course).exists()
+        )
 
     def test_unsubscribe_from_course(self):
         # Сначала создаем подписку
         Subscription.objects.create(user=self.user, course=self.course)
         self.client.force_authenticate(user=self.user)
-        response = self.client.post(self.url, {"course_id": self.course.id}, format='json')
+        response = self.client.post(
+            self.url, {"course_id": self.course.id}, format="json"
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['message'], "Подписка удалена")
-        self.assertFalse(Subscription.objects.filter(user=self.user, course=self.course).exists())
+        self.assertEqual(response.data["message"], "Подписка удалена")
+        self.assertFalse(
+            Subscription.objects.filter(user=self.user, course=self.course).exists()
+        )
 
     def test_subscription_requires_authentication(self):
-        response = self.client.post(self.url, {"course_id": self.course.id}, format='json')
+        response = self.client.post(
+            self.url, {"course_id": self.course.id}, format="json"
+        )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_subscription_without_course_id(self):
         self.client.force_authenticate(user=self.user)
-        response = self.client.post(self.url, {}, format='json')
+        response = self.client.post(self.url, {}, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("course_id не указан", response.data.get("error", ""))
