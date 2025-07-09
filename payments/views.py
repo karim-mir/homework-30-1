@@ -27,10 +27,14 @@ class PaymentAPIView(generics.CreateAPIView):
             name=product_name, description=product_description
         )
         price = create_stripe_price(product.id, amount=amount)
+
+        course_id = course.id if course else None
+        success_url = f"http://127.0.0.1:8000/educations/{course_id}/" if course_id else "https://127.0.0.1:8000/educations/"
+        cancel_url = "https://yourdomain.com/educations/payment-cancelled/"
         session = create_stripe_checkout_session(
             price_id=price.id,
-            success_url="https://yourdomain.com/success/",
-            cancel_url="https://yourdomain.com/cancel/",
+            success_url=success_url,
+            cancel_url=cancel_url,
         )
 
         payment = serializer.save(

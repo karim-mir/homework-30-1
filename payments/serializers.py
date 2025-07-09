@@ -7,3 +7,4 @@ class PaymentSerializer(ModelSerializer):
     class Meta:
         model = Payment
         fields = "__all__"
+        ref_name = "PaymentsPaymentSerializer"
