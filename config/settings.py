@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "educations",
     "payments",
     "drf_yasg",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -105,3 +106,28 @@ REST_FRAMEWORK = {
 }
 
 API_KEY_STRIPE = os.getenv("API_KEY_STRIPE")
+
+#Redis settings
+CACHES = {
+    "default": {
+        "BACKEND": os.getenv("BACKEND"),
+        "LOCATION": os.getenv("LOCATION"),
+    }
+}
+
+# URL-адрес брокера сообщений
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+
+# URL-адрес брокера результатов, также Redis
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
+
+# Часовой пояс для работы Celery
+CELERY_TIMEZONE = os.getenv("CELERY_TIMEZONE")
+
+# Флаг отслеживания выполнения задач
+CELERY_TASK_TRACK_STARTED = os.getenv("CELERY_TASK_TRACK_STARTED", "False")
+
+# Максимальное время на выполнение задачи
+CELERY_TASK_TIME_LIMIT = int(os.getenv("CELERY_TASK_TIME_LIMIT", 1800))
+
+CELERY_BEAT_SCHEDULER = os.getenv("CELERY_BEAT_SCHEDULER")
