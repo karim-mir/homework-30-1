@@ -3,6 +3,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from celery.schedules import crontab
+
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -87,7 +89,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = os.getenv("TIMEZONE")
 
 USE_I18N = True
 
@@ -121,13 +123,20 @@ CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 # URL-адрес брокера результатов, также Redis
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
 
-# Часовой пояс для работы Celery
-CELERY_TIMEZONE = os.getenv("CELERY_TIMEZONE")
-
 # Флаг отслеживания выполнения задач
-CELERY_TASK_TRACK_STARTED = os.getenv("CELERY_TASK_TRACK_STARTED", "False")
+CELERY_TASK_TRACK_STARTED = os.getenv("CELERY_TASK_TRACK_STARTED", "False") == "True"
 
 # Максимальное время на выполнение задачи
 CELERY_TASK_TIME_LIMIT = int(os.getenv("CELERY_TASK_TIME_LIMIT", 1800))
 
-CELERY_BEAT_SCHEDULER = os.getenv("CELERY_BEAT_SCHEDULER")
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+CELERY_BEAT_SCHEDULE = {
+    "deactivate-inactive-users-every-day":{
+        "task": "users.tasks.deactivate_inactive_users",
+        "schedule": crontab(hour=0, minute=0),
+    },
+}
+
+# Часовой пояс для работы Celery
+CELERY_TIMEZONE = os.getenv("CELERY_TIMEZONE", TIME_ZONE)
