@@ -27,6 +27,7 @@ class Course(models.Model):
         verbose_name="Описание",
         help_text="Введите описание курса",
     )
+    last_notified = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Курс"

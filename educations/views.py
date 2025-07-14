@@ -1,3 +1,6 @@
+from datetime import timedelta
+
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics, viewsets
 from rest_framework.generics import get_object_or_404
@@ -11,6 +14,7 @@ from educations.paginators import StandardResultsSetPagination
 from educations.permissions import IsOwnerOfCourseOrModerator
 from educations.serializers import (CourseSerializer, LessonSerializer,
                                     PaymentSerializer)
+from educations.tasks import send_course_update_email
 from users.permissions import IsModerator, IsOwner
 
 
@@ -22,6 +26,15 @@ class CourseViewSet(OwnerOrModeratorQuerysetMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    def perform_update(self, serializer):
+        """ Логика отправки писем в контроллере обновления курса """
+        course = serializer.save()
+        # Получаем всех подписчиков курса
+        subscriptions = Subscription.objects.filter(course=course)
+        for sub in subscriptions:
+            # Запускаем асинхронную задачу отправки письма
+            send_course_update_email.delay(sub.user.email, course.title)
 
 
 class LessonListCreateAPIView(
@@ -42,6 +55,21 @@ class LessonRetrieveUpdateDestroyAPIView(
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator | IsOwner]
+
+    def perform_update(self, serializer):
+        lesson = serializer.save()
+        course = lesson.course
+
+        now = timezone.now()
+        notify_interval = timedelta(hours=4)
+
+        if not course.last_notified or (now - course.last_notified) > notify_interval:
+            subscriptions = Subscription.objects.filter(course=course)
+            for sub in subscriptions:
+                send_course_update_email.delay(sub.user.email, course.title)
+
+            course.last_notified = now
+            course.save(update_fields=["last_notified"])
 
 
 class PaymentListAPIView(generics.ListAPIView):
