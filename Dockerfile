@@ -1,6 +1,7 @@
-FROM python:3.12-slim
-WORKDIR /code
-COPY requirements.txt /code/
-RUN pip install --upgrade pip && pip install -r requirements.txt
-COPY . /code/
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+FROM nginx:latest
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+COPY html/ /user/share/nginx/html/
+
+EXPOSE 80
