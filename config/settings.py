@@ -113,7 +113,7 @@ API_KEY_STRIPE = os.getenv("API_KEY_STRIPE")
 #Redis settings
 CACHES = {
     "default": {
-        "BACKEND": os.getenv("BACKEND"),
+        "BACKEND": os.getenv("BACKEND", "django.core.cache.backends.locmem.LocMemCache"),
         "LOCATION": os.getenv("LOCATION"),
     }
 }
