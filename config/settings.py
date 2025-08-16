@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -140,3 +141,11 @@ CELERY_BEAT_SCHEDULE = {
 
 # Часовой пояс для работы Celery
 CELERY_TIMEZONE = os.getenv("CELERY_TIMEZONE", TIME_ZONE)
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'test_db.sqlite3',
+        }
+    }

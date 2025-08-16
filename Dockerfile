@@ -1,7 +1,15 @@
-FROM nginx:latest
+FROM python:3.10
 
-COPY nginx.conf /etc/nginx/nginx.conf
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-COPY html/ /user/share/nginx/html/
+WORKDIR /app
 
-EXPOSE 80
+COPY requirements.txt /app/
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+COPY . /app/
+
+RUN mkdir -p /app/static
+
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
