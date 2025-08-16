@@ -1,6 +1,6 @@
 name: Django CI
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   test:
@@ -51,6 +51,7 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_HOST: localhost
           DB_PORT: 5432
+          API_KEY_STRIPE: ${{ secrets.API_KEY_STRIPE }}
         run: python manage.py migrate
 
       - name: Run tests
@@ -61,6 +62,7 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_HOST: localhost
           DB_PORT: 5432
+          API_KEY_STRIPE: ${{ secrets.API_KEY_STRIPE }}
         run: python manage.py test
 
   build-and-push:
